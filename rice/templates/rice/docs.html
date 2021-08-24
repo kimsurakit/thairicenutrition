@@ -1,0 +1,73 @@
+{% extends "rice/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'rice/css/docs.css' %}">
+{% endblock %}
+{% block content %}
+<div class='main-body'>
+
+  <nav id="navbar">
+    <header>
+      Documentation
+    </header>
+    <a href="#Introduction" class="nav-link">เริ่มต้นการใช้งาน</a>
+    <a href="#register" class="nav-link">การสร้างบัญชีผู้ใช้</a>
+    <a href="#serach-data" class="nav-link">การค้นหาข้อมูลโภชนการข้าว</a>
+    <a href="#advanced-serach" class="nav-link">การค้นหาขั้นสูง</a>
+    <a href="#filter-data" class="nav-link">การกรองข้อมูล</a>
+  </nav>
+
+  <main id="main-doc">
+    <section class="main-section" id='Introduction'>
+      <header>
+        เริ่มต้นการใช้งาน
+      </header>
+    </section>
+    <section class="main-section" id='register'>
+      <header>
+        การสร้างบัญชีผู้ใช้
+      </header>
+      <p>กรอกข้อมูลที่จำเป็นในการเข้าสู่ระบบ
+        หลังจากสร้างบัญชีผู้ใช้สำเร็จผู้ดูและระบบจะทำการตรวจสอบข้อมูลผู้ใช้และอนุมัติบัญชีการเข้าใช้งาน</p>
+    </section>
+    <section class="main-section" id='serach-data'>
+      <header>
+        การค้นหาข้อมูลโภชนการข้าว
+      </header>
+      <p>1. การค้นหาจากคำสำคัญผ่านหน้า Homepage </p>
+      <p>2. การค้นหาขั้นสูงผ่านหน้า Advanced Search</p>
+    </section>
+    <section class="main-section" id='advanced-serach'>
+      <header>
+        การค้นหาขั้นสูง
+      </header>
+      <p>เลือก field ที่ใช้ในการค้นหา เลือก condition เงื่อนไขของข้อมูล ใส่ keyword ที่ต้องการค้นหา</p>
+      <p>การเพิ่มตัวเลือกในการค้นหามีอยู่ 2 วิธี
+      <ul>
+        <li>1. รวมตัวเลือกการ AND วิธีการนี้จะทำให้ผลลัพธ์ข้อมูลตรงตามทุกเงื่อนไข</li>
+        <li>2. รวมตัวเลือกการ OR วิธีการนี้จะทำให้ผลลัพธ์ข้อมูลตรงตามบางเงื่อนไข</li>
+      </ul>
+      </p>
+    </section>
+    <section class="main-section" id='filter-data'>
+      <header>
+        การกรองข้อมูล
+      </header>
+      <p>1. การกรอกข้อมูลจากชนิดของข้าวโดยมีดังนี้
+      <ul>
+        <li>ข้าวเปลือก (Paddy rice)</li>
+        <li>ข้าวกล้อง (Unmilled rice)</li>
+        <li>ข้าวสาร (Milled rice)</li>
+        <li>ข้าวนึ่ง (Parboiled rice)</li>
+        <li>ข้าวกล้องงอก (Germinated rice)</li>
+        <li>ข้าวเม่า (Milk-stage rice)</li>
+        <li>ข้าวขาวสุก (Cooked white rice)</li>
+      </ul>
+      </p>
+
+      <p>2. การกรอกข้อมูลจากปีที่ใช้ในการวิเคราะห์</p>
+    </section>
+  </main>
+</div>
+{% endblock %}

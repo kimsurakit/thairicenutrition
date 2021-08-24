@@ -1,0 +1,58 @@
+{% extends "profiles/base_admin.html" %}
+{% load static %}
+
+{% block content %}
+<main class="main">
+  <div class="main__hero">
+    <div class="page">
+      <div class="page__title">
+        <h2>Files management</h2>
+
+      </div>
+    </div>
+    <div class="main__content">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="row-checkbox">
+            </th>
+            <th>id</th>
+            <th>Username</th>
+            <th>Email address</th>
+            <th>Institute</th>
+            <th>Type File</th>
+            <th>Created Date</th>
+            <th>File</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in files %}
+          <tr>
+            <td data-id={{ item.id }}>{{ item.id }}</td>
+            <td>{{ item.user.username }}</td>
+            <td>{{ item.user.email }}</td>
+            <td>{{ item.user.institute }}</td>
+            <td>
+              <div class="block {% if item.type_file == 'PH' %} block-purple
+                {% elif item.type_file == 'BI' %} block-success
+                {% elif item.type_file == 'SP' %} block-danger
+              {% elif item.type_file == 'NU' %} block-warning
+              {% elif item.type_file == 'MD' %} block-article
+              {% elif item.type_file == 'CH' %} block-secondary {% endif %} ">
+                {{ item.get_type_file_display }}
+              </div>
+            </td>
+            <td>{{ item.created_at }}</td>
+            <td><a href="{% get_media_prefix %}{{ item.upload }}">{{ item.upload }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+{% block script %}
+<script src="{% static 'profiles/js/file_manage.js' %}"></script>
+{% endblock %}

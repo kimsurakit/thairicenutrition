@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+  <title>{% block title %}{% endblock %}</title>
+  {% block extra_head %} {% endblock %}
+</head>
+
+<body style="word-wrap: break-word">
+  <div style="position: relative">
+    <div style="width: 100%; padding-top: 28px; padding-bottom: 16px">
+      <div style="text-align: center; margin: 0 auto">
+        <a href="">
+          <img src="{% static 'images/logo.png' %}" alt="logo" style="width: 5%" />
+        </a>
+      </div>
+    </div>
+  </div>
+  {% block content %} {% endblock %}
+</body>
+
+</html>

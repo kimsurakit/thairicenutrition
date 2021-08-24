@@ -1,0 +1,89 @@
+{% extends "rice/base.html" %}
+{% load static %}
+{% block extra_head %}
+<script src="https://unpkg.com/vega@5.20.2/build/vega.min.js"></script>
+<script src="https://unpkg.com/vega-lite@5.1.0/build/vega-lite.min.js"></script>
+<script src="https://unpkg.com/vega-lite-api@5.0.0/build/vega-lite-api.min.js"></script>
+<script src="https://unpkg.com/vega-tooltip@0.27.0/build/vega-tooltip.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="grid-2-sidebar">
+  <div class="sidebar">
+    <div class="sidebar__col">
+      <h6 class="sidebar__heading">
+        <span>Comparison</span>
+      </h6>
+      <ul class="sidebar__list">
+        <li class="sidebar__item">
+          <button id="btn-phy" class="sidebar__link" value="Physical">Physical properties</button>
+        </li>
+        <li class="sidebar__item">
+          <button id="btn-ch" class="sidebar__link" value="Chemical">Chemical properties</button>
+        </li>
+        <li class="sidebar__item">
+          <button id="btn-nu" class="sidebar__link" value="Nutrition">Nutritional properties</button>
+        </li>
+        <li class="sidebar__item">
+          <button id="btn-bio" class="sidebar__link" value="Bioactive">Bioactive Compounds</button>
+        </li>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar__col">
+      <h6 class="sidebar__heading">
+        <span>Comparison</span>
+      </h6>
+      <ul class="sidebar__list">
+        <li class="sidebar__item">
+          <div class="sidebar__input">
+            <div>
+              <span>Chart Type</span>
+              <select class="form-select" id="select-chart">
+                <option value="1" selected>Bar Charts</option>
+                <option value="2">Scatter Plot</option>
+                <option value="3">Box Plot</option>
+              </select>
+            </div>
+          </div>
+        </li>
+        <li class="sidebar__item">
+          <div class="sidebar__input">
+            <div>
+              <span>x-axis</span>
+              <select class="form-select" id="select-x">
+              </select>
+              <select class="form-select" id="select-type-1">
+                <option value="n" selected>nominal</option>
+                <option value="q">quantitative</option>
+              </select>
+            </div>
+          </div>
+        </li>
+        <li class="sidebar__item">
+          <div class="sidebar__input">
+            <div>
+              <span>y-axis</span>
+              <select class="form-select" id="select-y">
+              </select>
+              <select class="form-select" id="select-type-2">
+                <option value="n" selected>nominal</option>
+                <option value="q">quantitative</option>
+              </select>
+            </div>
+          </div>
+        </li>
+    </div>
+  </div>
+  <div class="view">
+    <div style="padding:2em">
+      <div class="chart"
+        style="width: 100%; max-width: 1000px; margin: 0 auto; height: 500px; overflow-x: auto; padding: 2em;">
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{% static 'rice/js/compare.js' %}" defer></script>
+{% endblock %}

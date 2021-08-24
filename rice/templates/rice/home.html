@@ -1,0 +1,120 @@
+{% extends "rice/base.html" %}
+{% load static %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1 class="subhead">Thai Rice Nutrition Data</h1>
+    <form action="{% url 'rice:searches' %}" class="search-form ">
+      <input type="hidden" name="search-form" value="home">
+      <div class="search-form__input-wrapper">
+        <input placeholder="Search..." aria-label="Search Form" type="search" name="q" autocomplete="off"
+          autocapitalize="none" autocorrect="off" spellcheck="false" autofocus="autofocus"
+          data-test-id="search-form-input" value="" class="search-form__input">
+      </div>
+      <div class="search-form__actions">
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+          </svg>
+        </button>
+      </div>
+      <div class="search-form__autocomplete">
+        <!--  -->
+      </div>
+    </form>
+  </div>
+</section>
+<section class="features">
+  <div class="container">
+    <div class="features__heading flex">
+      <div class="col-12 text-center">
+        <h2>Number of total records by rice category</h2>
+      </div>
+    </div>
+    <div class="features__grid">
+      {% for key,value in rice_categories_count.items %}
+      {% if value != 0 %}
+      <a class="features__link" href="/rice_list/?fiter-form=&select_field={{ key }}">
+        <div class="features__item">
+          <h5><span class="counter">{{ value }}</span></h5>
+          <p>{{ key }}</p>
+        </div>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block script %}
+<script>
+  async function getData(url) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+      return response.json();
+    } catch (err) {
+      throw new Error('Something failed');
+    }
+  }
+
+  const searchElem = document.querySelector('.search-form__input');
+  const autocomplete = document.querySelector('.search-form__autocomplete');
+
+  function clearResults() {
+    const ulElem = autocomplete.querySelector('ul');
+    if (ulElem) {
+      autocomplete.removeChild(ulElem);
+    }
+  }
+
+  function selectData(event) {
+    searchElem.value = event.target.innerText;
+    clearResults();
+  }
+
+
+
+  async function Autocomplete() {
+    const data = await getData('./get-data');
+    console.log(data);
+    return (event) => {
+      const inputText = event.target.value.toLowerCase();
+      clearResults();
+      if (inputText) {
+        const matched = data.data.filter((item) =>
+          item.toLowerCase().startsWith(inputText)
+        );
+        const ulElem = document.createElement('ul');
+        if (matched.length !== 0) {
+          matched.forEach((item) => {
+            const liElem = document.createElement('li');
+            liElem.innerText = item;
+            liElem.onmousedown = selectData;
+            ulElem.appendChild(liElem);
+          });
+          autocomplete.appendChild(ulElem);
+        } else {
+          clearResults();
+        }
+      }
+    }
+
+  }
+  async function run() {
+    const onInput = await Autocomplete()
+    searchElem.addEventListener('input', onInput);
+    searchElem.addEventListener('keydown', onInput);
+    searchElem.addEventListener('focus', onInput);
+    searchElem.addEventListener('blur', clearResults);
+  }
+
+  run()
+</script>
+{% endblock script %}

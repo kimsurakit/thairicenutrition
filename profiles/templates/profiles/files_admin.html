@@ -1,0 +1,66 @@
+{% extends "profiles/base_admin.html" %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'profiles/css/js.998f9fb9.css' %}">
+{% endblock %}
+{% block modal %}
+<div id="modal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <span id="modal-close" class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p class="modal-body-text"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="modal-close">Close</button>
+        <button type="button" class="btn btn-primary" id="modal-save">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<main class="main">
+  <div class="main__hero">
+    <div class="page">
+      <div class="page__title">
+        <h2>File Upload</h2>
+
+      </div>
+    </div>
+
+    <div class="main__content">
+      <div class="upload-form">
+        <div id="alert-box"></div>
+        <form id="my-form" action="/target" class="dropzone">
+          <div style="display: flex; align-items: center;">
+            <button id="on-upload" type="button" style="display: none;" value="" class="btn">summit</button>
+            <button id="on-remove" type="button" style="display: none; margin-left: 1em;" value=""
+              class="btn btn-danger">remove</button>
+            <div>
+              <input type="radio" name="typeFile" id="PH" value="PH">
+              <label for="PH">Physical</label>
+              <input type="radio" name="typeFile" id="CH" value="CH">
+              <label for="CH">Chemical</label>
+              <input type="radio" name="typeFile" id="SP" value="SP">
+              <label for="SP">Sampleinfo</label>
+              <input type="radio" name="typeFile" id="NU" value="NU">
+              <label for="NU">Nutrition</label>
+              <input type="radio" name="typeFile" id="BI" value="BI">
+              <label for="BI">Bioactive</label>
+              <input type="radio" name="typeFile" id="MD" value="MD">
+              <label for="MD">Meta Data</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+{% block script %}
+<script src="{% static 'profiles/js/file_upload.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "rice/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<script src="https://unpkg.com/vega@5.20.2/build/vega.min.js"></script>
+<script src="https://unpkg.com/vega-lite@5.1.0/build/vega-lite.min.js"></script>
+<script src="https://unpkg.com/vega-lite-api@5.0.0/build/vega-lite-api.min.js"></script>
+<script src="https://unpkg.com/vega-tooltip@0.27.0/build/vega-tooltip.min.js"></script>
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+  <section class="data-info">
+    <div class="data-info__head">
+      <h3 class="data-info__title">{{ riceVarieties }}</h3>
+      <div class="data-info__option">
+        <a class="data-info__option--prev" href="{% url 'rice:info-view' prev %}"> &#60;</a>
+        <a class="data-info__option--next" href="{% url 'rice:info-view' next %}"> &#62; </a>
+      </div>
+    </div>
+    <div class="data-info__content">
+      {% for key, value in Sampleinfo.items %}
+      <div class="data-info__item">
+        <p>{{key}}</p>
+        <h1>{{ value }}</h1>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  <!--  -->
+  <section class="dashboard">
+    <nav class="dashboard__menu">
+      <ul>
+        <li><a id="menu-phy" class="btn-menu" data-field="Physical">Physical</a></li>
+        <li><a id="menu-chem" class="btn-menu" data-field="Chemical">Chemical</a></li>
+        <li><a id="menu-nutri" class="btn-menu" data-field="Nutrition">Nutrition</a></li>
+        <li><a id="menu-bio" class="btn-menu" data-field="Bioactive">Bioactive</a></li>
+      </ul>
+    </nav>
+    <div class="group-table">
+
+    </div>
+    <div class="dashboard__chart" id="view"></div>
+  </section>
+</div>
+{{ id|json_script:"id" }}
+{% endblock %}
+{% block script %}
+
+<script src=" {% static '/rice/js/info.js' %}" defer></script>
+
+{% endblock script %}

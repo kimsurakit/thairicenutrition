@@ -1,0 +1,91 @@
+{% extends "rice/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+
+  <div class="content b-sd p-2">
+    <div class="">
+      <h1>Advanced Search</h1>
+    </div>
+    <form id="form-container" class="flex" style="flex-direction: column; align-items: flex-start; margin: 0 auto;
+    max-width: 900px" action="{% url 'rice:searches' %}" method="post" action="">
+      {% csrf_token %}
+      {{ formset.management_form }}
+      {% for form in formset %}
+      <div class="flex flex-ai-fe mb-1" id="group">
+        <div>
+          <label class="form-label">{{ form.select_field.label }}</label>
+          {{ form.select_field }}
+        </div>
+        <div class="ml-1">
+          <label class="form-label">{{ form.Condition.label }}</label>
+          {{ form.Condition }}
+        </div>
+        <div class="ml-1">
+          <label class="form-label">{{ form.Keyword.label }}</label>
+          {{ form.Keyword }}
+        </div>
+        <div class="ml-1">
+          {{ form.operation }}
+        </div>
+        <div class="group-btn ml-1" id="btn-manage">
+          <button class="btn-circle" id="add-form" type="button"><span class="success"
+              style="line-height: 52px">+</span></button>
+          <!-- <button class="btn-circle" id="delete-form" type="button"><span class="danger">-</span></button> -->
+        </div>
+      </div>
+      {% endfor %}
+      <div class="group-btn" id="end-form" style="align-self: flex-end;">
+        <button type="button" class="btn btn-danger" id="reset-form" disabled>Reset</button>
+        <button type="submit" id="btn-submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  let advancedSearchForm = document.querySelectorAll("#group")
+  let container = document.querySelector("#form-container")
+  const addButton = document.querySelector("#add-form")
+
+  const resetButton = document.querySelector("#reset-form")
+  const endForm = document.querySelector("#end-form")
+  let formNum = advancedSearchForm.length - 1
+  let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+  const formRegex = RegExp(`form-(\\d){1}-`, 'g')
+
+  addButton.addEventListener('click', addForm)
+  function addForm(e) {
+    e.preventDefault()
+    const btnManage = document.querySelector("#btn-manage")
+    btnManage.remove()
+
+    let newForm = advancedSearchForm[0].cloneNode(true) //Clone the bird form
+
+    formNum++ //Increment the form number
+    newForm.appendChild(btnManage)
+    newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form number
+    container.insertBefore(newForm, endForm) //Insert the new form at the end of the list of forms
+    totalForms.setAttribute('value', `${formNum + 1}`)
+    resetButton.disabled = false
+    const newaddButton = newForm.querySelector("#add-form")
+    newaddButton.addEventListener('click', addForm)
+
+  }
+  function resetForm(e) {
+    e.preventDefault()
+    const btnManage = document.querySelector("#btn-manage")
+    advancedSearchForm = document.querySelectorAll("#group")
+    advancedSearchForm.forEach((element, index) => {
+      if (index !== 0) {
+        element.remove()
+        console.log(advancedSearchForm);
+      }
+    });
+    formNum = 0
+    totalForms.setAttribute('value', `${formNum + 1}`)
+    resetButton.disabled = true
+    advancedSearchForm[0].appendChild(btnManage)
+  }
+  resetButton.addEventListener('click', resetForm)
+</script>
+{% endblock content %}

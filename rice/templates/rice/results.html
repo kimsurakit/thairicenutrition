@@ -1,0 +1,162 @@
+{% extends "rice/base.html" %}
+{% load static %}
+
+{% block style %}
+<style>
+  .w-chip {
+    background-color: transparent;
+    border: 1px solid rgba(32, 33, 36, .16);
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: block;
+    font-size: 1em;
+    height: 32px;
+    line-height: 30px;
+    margin: 0 8px 12px 0;
+    overflow: hidden;
+    padding: 0 12px;
+    text-decoration: none;
+    transition: background-color .2s, border .2s;
+    text-align: center;
+  }
+
+  .w-chip:hover {
+    background-color: rgba(32, 33, 36, .04);
+    border: 1px solid rgba(32, 33, 36, .2);
+  }
+
+  .w-chip-a {
+    color: var(--clr-warning-700);
+    background-color: var(--clr-warning-100);
+    border: 1px solid var(--clr-warning-500);
+  }
+
+  .w-chip-b {
+    color: var(--clr-article-500);
+    background-color: var(--clr-article-100);
+    border: 1px solid var(--clr-article-500);
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="grid-sidebar">
+  <nav class="sidebar">
+    <div class="sidebar__col">
+      <form action=".">
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+          <input style="width: 100%; padding: 0.75em 0.45em; margin: 0.5em 0.75em; border-radius: 4px; font-size: 1rem;"
+            type="text" name="q" value="{% if q_serach %}{{ q_serach }}{% endif %}">
+        </div>
+        <h6 class="sidebar__heading">
+          <span>Rice Categories</span>
+        </h6>
+        <input type="hidden" name="fiter-form">
+        <ul class="sidebar__list">
+          {% for key,value in rice_categories_count.items %}
+          <li class="sidebar__item">
+            <div class="sidebar__input">
+              <div>
+                <input {% if key in select_field %} checked {% endif %} {% if not value %} disabled {% endif %}
+                  type="checkbox" name="select_field" value="{{key}}" onChange="this.form.submit()">
+                <span {% if not value %} style="color: var(--clr-neutral-300);" {% endif %}>{{key}}</span>
+              </div>
+              <div><span>({{value}})</span></div>
+
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% if advanced_search %}
+        <h6 class="sidebar__heading">
+          <span>Advanced Search</span>
+        </h6>
+        <div style="display: flex; flex-direction: column; justify-content: center; margin: 0 0.25em;">
+          {% for item in advanced_search %}
+          <a href=""
+            class="w-chip {% if item.operation == 'and' %}w-chip-a{% else %}w-chip-b{% endif %}">{{item.select_field }}
+            {{ item.condition }} {{ item.keyword }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 1em; width: 100%;">
+
+      <button class="btn btn-secondary" type="button"><a href="{% url 'rice:searches' %}"
+          style="color: white;">Reset</a></button>
+      <button type="submit" class="btn">Search</button>
+    </div>
+    </form>
+  </nav>
+  <main class="content">
+    <div class="table-content container-lg">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="row-checkbox">
+              <div class="ctn-checkbox">
+                <input type="checkbox" name="" id="checkall" class="checkbox">
+              </div>
+            </th>
+            <th scope="col">Crop Sample ID</th>
+            <th scope="col">Rice varieties (TH)</th>
+            <th scope="col">Rice varieties</th>
+            <th scope="col">Crop Site - Province</th>
+            <th scope="col">Year of analysis</th>
+            <th scope="col">Site of analysis</th>
+            <th scope="col">Data source </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in result %}
+          <tr>
+            <td><a href="{% url 'rice:info-view' data.cropSampleID %}" data-id={{ data.cropSampleID }}
+                style="color: #2470dc;">
+                {{ data.cropSampleID}}
+              </a>
+            </td>
+            {% if data.riceVarietiesTH %}
+            <td>{{ data.riceVarietiesTH }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% if data.riceVarietiesEN %}
+            <td><a href="{% url 'rice:info-view' data.cropSampleID %}" style="color: #2470dc;">
+                {{ data.riceVarietiesEN}}
+              </a>
+            </td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% if data.cropSiteProvince %}
+            <td>{{ data.cropSiteProvince }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% if data.yearOfAnalysis %}
+            <td>{{ data.yearOfAnalysis }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% if data.siteOfAnalysis %}
+            <td>{{ data.siteOfAnalysis }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% if data.dataSource %}
+            <td>{{ data.dataSource }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+{% endblock %}
+{% block script %}
+<script src="{% static '/rice/js/res.js' %}"></script>
+{% endblock script %}

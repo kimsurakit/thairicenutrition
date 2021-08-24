@@ -1,0 +1,5 @@
+Django==2.2.3
+pymongo==3.11.3
+Pillow==8.1.2
+openpyxl==3.0.6
+django-allauth==0.44.0

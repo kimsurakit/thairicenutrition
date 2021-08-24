@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  {% block extra_head %}
+  {% endblock %}
+  <title>Thia Rice Nutrition Data</title>
+</head>
+{% block style %}
+{% endblock %}
+<style>
+  li.current a {
+    font-weight: bold;
+
+  }
+
+  li.current a::before {
+    background-color: var(--clr-primary-400);
+
+  }
+</style>
+
+<body>
+  <div class="loader"></div>
+  <header class="navbar">
+    <div class="navbar__head">
+      <div class="navbar__container">
+        <a href="/" class="navbar__logo">
+          <img src="{% static '/images/logo.png' %}" alt="logo">
+          <div class="navbar__logo-text">
+            <div>Thai Rice</div>
+            <div>Nutrition Data</div>
+          </div>
+        </a>
+        <div class="mobile-menu-btn">
+          <img id="mobile-cta" class="mobile-menu" src="{% static '/images/menu.svg' %}" alt="">
+
+        </div>
+        <nav class="navbar__menu">
+          <img id="mobile-exit" class="mobile-menu-exit" src="{% static '/images/exit.svg' %}" alt="">
+          <ul class="primary-nav">
+            <li class="{% if "/" == request.path %}current{% endif %}"><a href="{% url 'rice:home' %}">Home</a></li>
+            <li class="{% if "/rice_list/" in request.path %}current{% endif %}"><a href="{% url 'rice:searches' %}">Rice
+                Lists</a></li>
+            <li class="{% if "/advanced_search/" in request.path %}current{% endif %}"><a
+                href="{% url 'rice:advanced-search' %}">Advanced Search</a></li>
+            <li class="{% if "/about/" in request.path %}current{% endif %}"><a href="{% url 'rice:about' %}">About</a></li>
+          </ul>
+          <ul class="secondary-nav">
+            {% if user.is_authenticated %}
+              {% if user.is_staff %}
+              <li class="login-cta"><a href="{% url 'profiles:user-manage' %}">Admin Panel</a></li>
+              {% endif %}
+            <form method="post" action="{% url 'account_logout' %}">
+              {% csrf_token %}
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+              {% endif %}
+              <button class="logout-cta" type="submit">Sign Out</button>
+            </form>
+            {% else %}
+            <li class="login-cta"><a href="{% url 'account_login' %}">Login</a></li>
+            <li class="singup-cta"><a href="{% url 'account_signup' %}">Signup</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  {% block content %}
+  {% endblock content %}
+</body>
+<script>
+  let preloader = document.querySelector('.loader');
+  if (preloader) {
+    window.addEventListener('load', () => {
+      preloader.remove()
+    });
+  }
+
+</script>
+{% block script %}
+{% endblock script %}
+
+
+</html>
