@@ -55,7 +55,6 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Migration database
-migrations/
 migrations/0001_initial.py
 
 # Unit test / coverage reports
@@ -216,3 +215,4 @@ src/
 node_modules/
 .dist/
 .vscode/
+development/

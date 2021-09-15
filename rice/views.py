@@ -1,12 +1,16 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from .forms import AdcancedSearchFormSet,SELECT_FIELD_CHOICES,CONDITION_CHOICES
 from django.conf import settings
 from django.http import HttpResponse, request
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from .utils import get_collection_handle, get_db_handle, special_characters, count_categories, get_data_from_mongo, get_sample_data
+
+@method_decorator(login_required, name='dispatch')
 class HomePageView(TemplateView):
     template_name = "rice/home.html"
 
@@ -20,6 +24,7 @@ class HomePageView(TemplateView):
         context['rice_categories_count'] = rice_categories_count
         return context
 
+@method_decorator(login_required, name='dispatch')
 class DocsPageView(TemplateView):
     template_name = "rice/docs.html"
 
@@ -42,6 +47,7 @@ def render_pdf_view(request):
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
+@login_required
 def rice_list_view(request):
     db, _ = get_db_handle(settings.DB_NAME, settings.HOST_MONGODB)
     collection = get_collection_handle(db, settings.COLLECTION_NAME)
@@ -180,6 +186,7 @@ def rice_list_view(request):
             return redirect('rice:advanced-search')
     return render(request, 'rice/results.html', context)
 
+@login_required
 def get_data_name(request):
     if request.is_ajax():
         db, _ = get_db_handle(settings.DB_NAME, settings.HOST_MONGODB)
@@ -197,22 +204,24 @@ def get_data_name(request):
         'error': 'The resource was not found'
     })
 
+@login_required
 def get_data_info(request, pk, fieldGroup):
+    if request.is_ajax():
+        list_item = get_data_from_mongo(pk, fieldGroup)
 
-    list_item = get_data_from_mongo(pk, fieldGroup)
-
-    return JsonResponse(list_item, safe=False)
+        return JsonResponse(list_item, safe=False)
     return JsonResponse({
         'status_code': 404,
         'error': 'The resource was not found'
     })
 
+@login_required
 def info_view(request, pk):
     Sampleinfo = get_sample_data(pk)
     context = {'id': pk, 'prev':pk-1,'next':pk+1, 'riceVarieties':Sampleinfo[0]['Rice varieties'],'Sampleinfo': Sampleinfo[0]}
     return render(request, 'rice/info.html',context)
 
-
+@login_required
 def advanced_search_view(request):
     template_name = 'rice/advanced_search.html'
     if request.method == 'GET':
@@ -221,10 +230,12 @@ def advanced_search_view(request):
         'formset': formset
     })
 
+@login_required
 def comparison_view(request):
     template_name = 'rice/compare.html'
     return render(request, template_name, {})
 
+@login_required
 def get_data_comparison_view(request,fieldGroup):
     if request.is_ajax():
         if fieldGroup == 'Bioactive' and request.user.is_anonymous:
@@ -289,5 +300,6 @@ def get_data_comparison_view(request,fieldGroup):
         'error': 'The resource was not found'
     })
 
+@method_decorator(login_required, name='dispatch')
 class AboutPageView(TemplateView):
     template_name = "rice/about.html"
